@@ -6,31 +6,42 @@ import csv
 class ZipScraper:
 
     def __init__(self):
-        self.b = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver')
-        self.START = 'http://www.zipcodestogo.com/ZIP-Codes-by-State.htm'
-        self.stateIdx = 0
-        self.states = []
-        self.outFileName = 'zipcodes.csv'
+        print("Initializing...")
+        self.START = 'http://www.zipcodestogo.com/ZIP-Codes-by-State.htm'  # URL for main starting point
+        self.outFileName = 'zipcodes.csv'  # output file name
+
+        # test if file exists, create if it doesn't
+        try:
+            with open(self.outFileName, "r") as f:
+                print("CSV file found!")
+        except IOError:
+            print("CSV file not found! Creating now...")
+            with open(self.outFileName, "a") as f:
+                print("File created successfully!")
+
+        print("Scraper initialized.")
 
     def beginScraping(self):
-        self.b.get(self.START)  # go to starting URL
 
-        self.states = self.b.find_elements_by_class_name('stateLink')  # enumerate links for each state
+        b = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver')
+        b.get(self.START)  # go to starting URL
+
+        states = b.find_elements_by_class_name('stateLink')  # enumerate links for each state
 
         trElem = 3  # for identifying tr xpath element. starts at 3 on each page
 
-        for state in self.states:
+        for state in states:
             state.click()  # click current link for states
 
             try:
                 # parse
                 while True:
                     # parse zip code, city, and county
-                    zipCode = self.b.find_element_by_xpath('id("leftCol")/table[1]/tbody[1]/tr[1]/td[1]/table[1]/tbody[1]/tr['+str(trElem)+']+td[1]')
+                    zipCode = b.find_element_by_xpath('id("leftCol")/table[1]/tbody[1]/tr[1]/td[1]/table[1]/tbody[1]/tr['+str(trElem)+']+td[1]')
 
-                    city = self.b.find_element_by_xpath('id("leftCol")/table[1]/tbody[1]/tr[1]/td[1]/table[1]/tbody[1]/tr['+str(trElem)+']+td[2]')
+                    city = b.find_element_by_xpath('id("leftCol")/table[1]/tbody[1]/tr[1]/td[1]/table[1]/tbody[1]/tr['+str(trElem)+']+td[2]')
 
-                    county = self.b.find_element_by_xpath('id("leftCol")/table[1]/tbody[1]/tr[1]/td[1]/table[1]/tbody[1]/tr['+str(trElem)+']+td[3]')
+                    county = b.find_element_by_xpath('id("leftCol")/table[1]/tbody[1]/tr[1]/td[1]/table[1]/tbody[1]/tr['+str(trElem)+']+td[3]')
 
                     with open(self.outFileName, 'w', newline='') as f:
                         outWriter = csv.writer(f)  # create writer object for writing to csv
@@ -44,6 +55,6 @@ class ZipScraper:
 
                 trElem = 3  # reset trElem for next table of zip codes
 
-                self.b.get(self.START)  # return to starting list of all state links
+                b.get(self.START)  # return to starting list of all state links
 
 
