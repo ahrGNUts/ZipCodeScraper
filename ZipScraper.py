@@ -50,11 +50,17 @@ class ZipScraper:
 
                     trElem += 1  # increment trElem to move to next row in the table
 
+                    sleep(1.5)  # short wait so as not to spam the server
+
             except NoSuchElementException:
                 print(state.text + " complete.")
 
                 trElem = 3  # reset trElem for next table of zip codes
 
+                sleep(1.5)  # short wait so as not to spam the server
+
                 b.get(self.START)  # return to starting list of all state links
+
+        b.close()  # close browser when done
 
 
