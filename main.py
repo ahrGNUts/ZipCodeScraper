@@ -7,7 +7,6 @@ scraper = ZipScraper.ZipScraper()
 
 
 # where the magick happens
-# print
 def main():
     while True:
         printMainMenu()
@@ -31,13 +30,13 @@ def main():
             exitAndClose()
 
 
-# print exit message an close the script
+# print exit message and close the script
 def exitAndClose():
     print("Exiting...\n")
     exit(0)
 
 
-# for when silly fingers/intentional malice/bots getting smarter/etc.
+# for silly fingers/intentional malice/bots getting smarter/etc.
 def invalidSelectionMessage():
     print("Invalid selection. Please choose another.\n")
 
@@ -47,3 +46,7 @@ def printMainMenu():
     print("1. Scrape all zip codes")
     print("2. Scrape a state's zip code")
     print("3. Add zip code data to database")
+    print("4. Exit")
+
+
+main()
