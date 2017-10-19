@@ -3,9 +3,6 @@
 import ZipScraper
 from sys import exit
 
-scraper = ZipScraper.ZipScraper()
-
-
 # where the magick happens
 def main():
     while True:
@@ -15,6 +12,7 @@ def main():
             choice = int(input("Choice: "))
 
             if choice == 1:
+                scraper = ZipScraper.ZipScraper()
                 scraper.beginScraping()
             elif choice == 2 or 3:
                 print("Under construction. Make another selection.")
